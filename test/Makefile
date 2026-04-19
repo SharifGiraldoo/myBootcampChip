@@ -1,23 +1,27 @@
-# Makefile
-# See https://docs.cocotb.org/en/stable/quickstart.html for more info
+# Makefile - Test para tt_um_alu7b
+# Bootcamp Diseño y Fabricación de Chips - UTP 2026
+# Ver https://docs.cocotb.org/en/stable/quickstart.html
 
-# defaults
+# Defaults
 SIM ?= icarus
-FST ?= -fst # Use more efficient FST format
+FST ?= -fst
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
+
+# IMPORTANTE: project.v incluye alu_7b.v y tt_um_alu7b.v via `include
+# Por eso solo se lista project.v aquí.
 PROJECT_SOURCES = project.v
 
 ifneq ($(GATES),yes)
 
-# RTL simulation:
-SIM_BUILD				= sim_build/rtl
+# Simulación RTL
+SIM_BUILD        = sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
 else
 
-# Gate level simulation:
-SIM_BUILD				= sim_build/gl
+# Simulación a nivel de compuertas (Gate Level)
+SIM_BUILD        = sim_build/gl
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL
 COMPILE_ARGS    += -DUSE_POWER_PINS
@@ -25,21 +29,19 @@ COMPILE_ARGS    += -DSIM
 COMPILE_ARGS    += -DUNIT_DELAY=\#1
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v
 VERILOG_SOURCES += $(PDK_ROOT)/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v
-
-# this gets copied in by the GDS action workflow
 VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
 
 endif
 
-# Allow sharing configuration between design and testbench via `include`:
-COMPILE_ARGS 		+= -I$(SRC_DIR)
+# Permitir includes entre src/ y test/
+COMPILE_ARGS += -I$(SRC_DIR)
 
-# Include the testbench sources:
+# Incluir testbench
 VERILOG_SOURCES += $(PWD)/tb.v
 TOPLEVEL = tb
 
-# List test modules to run, separated by commas and without the .py suffix:
+# Módulo(s) de prueba cocotb
 COCOTB_TEST_MODULES = test
 
-# include cocotb's make rules to take care of the simulator setup
+# Reglas de cocotb
 include $(shell cocotb-config --makefiles)/Makefile.sim
