@@ -5,24 +5,24 @@
 project:
   title:        "ALU 7 bits - Entrada Serial / Salida Paralela"
   author:       "Bootcamp IEEE OpenSilicon - IEEE CASS UTP 2026"
-  discord:      ""         # Completar con usuario de Discord si aplica
+  discord:      ""
   description:  "ALU de 7 bits con entrada serial (LSB primero). Soporta Suma, AND, OR, XOR y Resta. Protocolo: 7 bits op_A + 7 bits op_B + 3 bits opcode por flanco de CLK. Salida paralela en 8 bits + señal Done."
   language:     "Verilog"
-  clock_hz:     50000000   # 50 MHz (frecuencia máxima estimada para SKY130)
+  clock_hz:     50000000
 
-  # Tile mínimo: 167x108 um. El diseño es compacto, 1x1 es suficiente.
   tiles: "1x1"
 
-  # El módulo top-level debe comenzar con "tt_um_"
+  # IMPORTANTE: tt_tool.py busca el texto "module tt_um_alu7b" en los
+  # archivos listados aquí. Por eso se listan los 3 archivos por separado
+  # en lugar de usar un project.v con `include. El top_module debe estar
+  # definido directamente en uno de estos archivos.
   top_module: "tt_um_alu7b"
 
-  # Archivos fuente en ./src (listados individualmente)
   source_files:
-    - "project.v"
+    - "alu_7b.v"
+    - "tt_um_alu7b.v"
 
-# Descripción de pines para el datasheet y la página web de TinyTapeout
 pinout:
-  # ---- Entradas dedicadas ----
   ui[0]: "Bit_in - Dato de entrada serial (LSB primero: 7b op_A, 7b op_B, 3b opcode)"
   ui[1]: ""
   ui[2]: ""
@@ -32,7 +32,6 @@ pinout:
   ui[6]: ""
   ui[7]: ""
 
-  # ---- Salidas dedicadas ----
   uo[0]: "Data_out[0] - Resultado bit 0 (LSB)"
   uo[1]: "Data_out[1] - Resultado bit 1"
   uo[2]: "Data_out[2] - Resultado bit 2"
@@ -40,10 +39,9 @@ pinout:
   uo[4]: "Data_out[4] - Resultado bit 4"
   uo[5]: "Data_out[5] - Resultado bit 5"
   uo[6]: "Data_out[6] - Resultado bit 6 (MSB operando)"
-  uo[7]: "Data_out[7] - Carry / Borrow (extensión de signo para Suma y Resta)"
+  uo[7]: "Data_out[7] - Carry / Borrow (suma y resta)"
 
-  # ---- Pines bidireccionales ----
-  uio[0]: "Done - Pulso alto (1 ciclo CLK) cuando la operación ha finalizado"
+  uio[0]: "Done - Pulso alto (1 ciclo CLK) cuando la operacion ha finalizado"
   uio[1]: ""
   uio[2]: ""
   uio[3]: ""
