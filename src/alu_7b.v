@@ -17,6 +17,7 @@
  *   op  [2:0] - Código de operación
  *
  * Salidas:
+ *
  *   result [7:0] - Resultado (8 bits para acomodar carry/borrow en suma/resta)
  *
  * SPDX-License-Identifier: Apache-2.0

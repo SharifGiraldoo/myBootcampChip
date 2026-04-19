@@ -3,9 +3,9 @@
 
 """
 test.py  –  Banco de pruebas cocotb para tt_um_alu7b
-=====================================================
 
 Protocolo (17 posedges de captura + 1 posedge S_CALC):
+
   posedge  1.. 7  → Operando A [6:0], LSB primero, por ui_in[0]
   posedge  8..14  → Operando B [6:0], LSB primero, por ui_in[0]
   posedge 15..17  → Opcode    [2:0], LSB primero, por ui_in[0]
@@ -34,9 +34,9 @@ OP_SUB = 0b100
 CLK_PERIOD_NS = 10   # 100 MHz
 
 
-# ---------------------------------------------------------------------------
+
 # Reset: termina en FallingEdge (semiciclo bajo, listo para enviar bit[0])
-# ---------------------------------------------------------------------------
+
 async def reset_dut(dut):
     dut.rst_n.value  = 0
     dut.ui_in.value  = 0
@@ -46,9 +46,9 @@ async def reset_dut(dut):
     await FallingEdge(dut.clk)   # terminar en semiciclo bajo
 
 
-# ---------------------------------------------------------------------------
+
 # Enviar operación serial y capturar resultado
-# ---------------------------------------------------------------------------
+
 async def run_alu(dut, A, B, op):
     """
     Envía 17 bits seriales LSB-first y devuelve (resultado, done_visto).
@@ -82,9 +82,9 @@ async def run_alu(dut, A, B, op):
     return result_val, done_seen
 
 
-# ===========================================================================
-# test_project  (nombre requerido por la plantilla TinyTapeout)
-# ===========================================================================
+
+# test_project  
+
 @cocotb.test()
 async def test_project(dut):
     """Prueba completa de la ALU de 7 bits – todas las operaciones."""
@@ -93,7 +93,7 @@ async def test_project(dut):
     clock = Clock(dut.clk, CLK_PERIOD_NS, unit="ns")
     cocotb.start_soon(clock.start())
 
-    # Reset inicial (igual que la plantilla original de TinyTapeout)
+    # Reset inicial 
     dut._log.info("Reset")
     dut.ena.value    = 1
     dut.ui_in.value  = 0
@@ -105,7 +105,7 @@ async def test_project(dut):
 
     dut._log.info("Test project behavior")
 
-    # ---- Tabla de casos (A, B, op, esperado, descripción) ----
+    # Tabla de casos (A, B, op, esperado, descripción)
     test_cases = [
         # Suma
         (20,  30,  OP_ADD, (20  + 30)  & 0xFF, "ADD  20 +  30 =  50"),

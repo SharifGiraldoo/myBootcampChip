@@ -16,15 +16,16 @@
 module tb ();
 
   // Volcado de señales a archivo FST para visualización con GTKWave / Surfer
+
   initial begin
     $dumpfile("tb.fst");
     $dumpvars(0, tb);
     #1;
   end
 
-  // ------------------------------------------------------------
+
   // Declaración de señales
-  // ------------------------------------------------------------
+
   reg        clk;
   reg        rst_n;
   reg        ena;
@@ -40,9 +41,9 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // ------------------------------------------------------------
-  // Instancia del DUT (Device Under Test)
-  // ------------------------------------------------------------
+  
+// Instancia del DUT (Device Under Test)
+ 
   tt_um_alu7b user_project (
 `ifdef GL_TEST
       .VPWR   (VPWR),

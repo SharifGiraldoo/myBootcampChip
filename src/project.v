@@ -5,11 +5,10 @@
 
 `default_nettype none
 
-// ============================================================
+
 // Módulo 1: ALU combinacional de 7 bits
-// ============================================================
 // Op[2:0]:  000=Suma  001=AND  010=OR  011=XOR  100=Resta
-// ============================================================
+
 module alu_7b (
     input  wire [6:0] A,
     input  wire [6:0] B,
@@ -28,17 +27,15 @@ module alu_7b (
     end
 endmodule
 
-// ============================================================
+
 // Módulo 2 (top-level): ALU serial → paralela para TinyTapeout
-// ============================================================
 // Protocolo de entrada serial (ui_in[0] = Bit_in, LSB primero):
 //   Flancos  1.. 7  → Operando A [6:0]
 //   Flancos  8..14  → Operando B [6:0]
 //   Flancos 15..17  → Opcode op  [2:0]
 //   Flanco  18      → Done=1, resultado en uo_out[7:0]
-//
 // Reset activo bajo (rst_n=0): vuelve al estado inicial.
-// ============================================================
+
 module tt_um_alu7b (
     input  wire [7:0] ui_in,    // Dedicated inputs  — ui_in[0] = Bit_in
     output wire [7:0] uo_out,   // Dedicated outputs — Data_out[7:0]
@@ -50,16 +47,16 @@ module tt_um_alu7b (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-    // ------------------------------------------------------------------
+
     // Límites de bit_count (0..16, necesita 5 bits)
-    // ------------------------------------------------------------------
+
     localparam [4:0] CNT_A_END  = 5'd6;    // bits 0..6   → reg_A
     localparam [4:0] CNT_B_END  = 5'd13;   // bits 7..13  → reg_B
     localparam [4:0] CNT_OP_END = 5'd16;   // bits 14..16 → reg_op
 
-    // ------------------------------------------------------------------
+
     // FSM: S_RECV → S_CALC → S_DONE
-    // ------------------------------------------------------------------
+
     localparam [1:0] S_RECV = 2'd0,
                      S_CALC = 2'd1,
                      S_DONE = 2'd2;
@@ -74,15 +71,15 @@ module tt_um_alu7b (
 
     wire bit_in = ui_in[0];
 
-    // ------------------------------------------------------------------
+
     // Instancia de la ALU combinacional
-    // ------------------------------------------------------------------
+
     wire [7:0] alu_out;
     alu_7b u_alu (.A(reg_A), .B(reg_B), .op(reg_op), .result(alu_out));
 
-    // ------------------------------------------------------------------
+
     // FSM + datapath
-    // ------------------------------------------------------------------
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             state      <= S_RECV;
@@ -115,7 +112,7 @@ module tt_um_alu7b (
                 end
 
                 S_CALC: begin
-                    // reg_A/B/op estables → latchar resultado y pulsar Done
+                    // reg_A/B/op estables - latchar resultado y pulsar Done
                     reg_result <= alu_out;
                     done_reg   <= 1'b1;
                     state      <= S_DONE;
@@ -128,9 +125,9 @@ module tt_um_alu7b (
         end
     end
 
-    // ------------------------------------------------------------------
+
     // All output pins must be assigned. If not used, assign to 0.
-    // ------------------------------------------------------------------
+
     assign uo_out  = reg_result;
     assign uio_out = {7'b0, done_reg};
     assign uio_oe  = 8'b0000_0001;   // solo uio[0] es salida (Done)

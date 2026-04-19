@@ -4,9 +4,9 @@
 
 project:
   title:        "ALU 7 bits - Entrada Serial / Salida Paralela"
-  author:       "Bootcamp IEEE OpenSilicon - IEEE CASS UTP 2026"
+  author:       "Bootcamp Diseño y Fabricación de Chips UTP 2026"
   discord:      ""
-  description:  "ALU de 7 bits con entrada serial (LSB primero). Soporta Suma, AND, OR, XOR y Resta. Protocolo: 7 bits op_A + 7 bits op_B + 3 bits opcode por flanco de CLK. Salida paralela en 8 bits + señal Done."
+  description:  "ALU de 7 bits con entrada serial. Soporta Suma, AND, OR, XOR y Resta. Protocolo: 7 bits op_A + 7 bits op_B + 3 bits opcode por flanco de CLK. Salida paralela en 8 bits + señal Done."
   language:     "Verilog"
   clock_hz:     50000000
 
@@ -14,9 +14,6 @@ project:
 
   top_module: "tt_um_alu7b"
 
-  # Un solo archivo, igual que la plantilla del profesor.
-  # project.v contiene tanto alu_7b como tt_um_alu7b en el mismo archivo,
-  # por lo que tt_tool.py encuentra "module tt_um_alu7b" sin problema.
   source_files:
     - "project.v"
 
