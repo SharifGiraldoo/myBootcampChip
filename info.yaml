@@ -12,15 +12,13 @@ project:
 
   tiles: "1x1"
 
-  # IMPORTANTE: tt_tool.py busca el texto "module tt_um_alu7b" en los
-  # archivos listados aquí. Por eso se listan los 3 archivos por separado
-  # en lugar de usar un project.v con `include. El top_module debe estar
-  # definido directamente en uno de estos archivos.
   top_module: "tt_um_alu7b"
 
+  # Un solo archivo, igual que la plantilla del profesor.
+  # project.v contiene tanto alu_7b como tt_um_alu7b en el mismo archivo,
+  # por lo que tt_tool.py encuentra "module tt_um_alu7b" sin problema.
   source_files:
-    - "alu_7b.v"
-    - "tt_um_alu7b.v"
+    - "project.v"
 
 pinout:
   ui[0]: "Bit_in - Dato de entrada serial (LSB primero: 7b op_A, 7b op_B, 3b opcode)"
